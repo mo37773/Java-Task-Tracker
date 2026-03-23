@@ -77,7 +77,7 @@ public class JavaTaskTracker {
                         }
                     }
                     //if the id is not found in the list we will display a message accordingly
-                    if (taskFound == false) {
+                    if (!taskFound) {
                         System.out.println("The id you have entered does not exist in the list!");
                     }
                     /*MAYBE A WHILE LOOP HERE 
@@ -88,6 +88,40 @@ public class JavaTaskTracker {
                 *
                      */
 
+                }
+            }
+            //delete feature
+            else if(input.equalsIgnoreCase("delete")){
+                if(toDoList.isEmpty()){
+                    System.out.println("The To Do List is empty, you cannot remove from it!");
+                }
+                else{
+                    System.out.println("Enter the id of the task you want to remove...");
+                    int taskId = sc.nextInt();
+                    //this line is to make sure that if we use nextLine again it doesn't break the app
+                    sc.nextLine();
+                    //loop to match the task id and then remove it ( WILL HAVE TO FIGURE OUT A WAY TO READJUST THE IDS FOR ITEMS AFTER
+                    /*
+                    MAYBE HAVE A FOR LOOP WITH THE STARTING INT AS THE TASK ID THAT WE REMOVED
+                    RETRIEVE THE OBJECT, SET THE NEW ID AS THE TASK ID THAT WAS REMOVED 
+                    INCREMENT THE TASK ID OR COPY OF IT AND RETRIEVE AND SET AGAIN UNTIL WE REACH END OF TO DO LIST
+                    WILL CHECK TOMORROW IF THIS LOGIC WORKS OR FIND ANOTHER WAY
+                    */
+                    //boolean value to make sure task is found, if not ERROR MESSAGE
+                    boolean taskFound = false;
+                    for(int i = 0; i < toDoList.size(); i++){
+                        if(toDoList.get(i).getId()==taskId){
+                            toDoList.remove(i);
+                            System.out.println("The task with the id: " + taskId + " was removed successfully!");
+                            //break to exit the loop
+                            taskFound = true;
+                            break;
+                        }
+                    }
+                    if(!taskFound){
+                        System.out.println("The id you have entered doesn't exist!");
+                    }
+                    
                 }
             }
             System.out.println("Enter 'add/update/delete/mark/list' or 'exit' to close");
