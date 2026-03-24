@@ -4,13 +4,14 @@
  */
 package javatasktracker;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  *
  * @author marti
  */
-public class Task {
+public class Task implements Serializable {
     private int id;
     private String description;
     private String status;

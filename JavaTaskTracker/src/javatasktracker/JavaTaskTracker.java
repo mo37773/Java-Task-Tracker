@@ -4,6 +4,12 @@
  */
 package javatasktracker;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,6 +28,25 @@ public class JavaTaskTracker {
         //need to add while loop to keep app running unti i type exit
         ArrayList<Task> toDoList = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
+        //load a saved file
+            try{
+                File inFile = new File("output.dat");
+                FileInputStream fStream = new FileInputStream(inFile);
+                ObjectInputStream oStream = new ObjectInputStream(fStream);
+                
+                ArrayList<Task> readToDoList = (ArrayList<Task>)oStream.readObject();
+                for(Task t:readToDoList){
+                    toDoList.add(t);
+                }
+                System.out.println("File loaded successfully...");
+                oStream.close();
+            }
+            catch(IOException e){
+                System.out.println(e);
+            }        
+            catch(ClassNotFoundException ex){
+                System.out.println(ex);
+            }
         //after declaring the array list and scanner I will accept an input
         System.out.println("Enter a command 'add/update/delete/mark/list'");
         String input = sc.nextLine();
@@ -233,9 +258,22 @@ public class JavaTaskTracker {
                 }
             }
             else{
-                System.out.println("INVALID COMMAND - make sure you type in 'add/update/delete/mark/list'");
+                System.out.println("INVALID COMMAND - make sure you type in 'add/update/delete/mark/list'!");
             }
-            System.out.println("Enter 'add/update/delete/mark/list' or 'exit' to close");
+            //file saved
+            try{
+                File outFile = new File("output.dat");
+                FileOutputStream fStream = new FileOutputStream(outFile);
+                ObjectOutputStream oStream = new ObjectOutputStream(fStream);
+                
+                oStream.writeObject(toDoList);
+                System.out.println("File updated successfully...");
+                oStream.close();
+            }
+            catch(IOException e){
+                System.out.println(e);
+            }
+            System.out.println("Enter 'add/update/delete/mark/list' or 'exit' to close..");
             input = sc.nextLine();
         }
     }
