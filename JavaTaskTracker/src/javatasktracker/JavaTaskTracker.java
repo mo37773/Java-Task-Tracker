@@ -33,7 +33,7 @@ public class JavaTaskTracker {
                 String taskDescription = sc.nextLine();
                 //because the arraylist first index is 0 and we are adding to end I will use the size which is 0 now and add 1 so the first id starts at 1
                 int taskId = toDoList.size() + 1;
-                String taskStatus = "to-do";
+                String taskStatus = "toDo";
                 //localdate time because it looks better than currentTimeMillis
                 LocalDateTime taskCreatedAt = LocalDateTime.now();
                 LocalDateTime taskUpdatedAt = LocalDateTime.now();
@@ -49,7 +49,7 @@ public class JavaTaskTracker {
                     int taskId = sc.nextInt();
                     /*DEBUGGINGthis is to fix the debugging issue I commented below regarding updatedDesc, testing now 
                         ***TEST SUCCESS****
-                    */
+                     */
                     sc.nextLine();
                     boolean taskFound = false;
                     //get the task object from the array list if the id exists (we will traverse the array for this) and then set a new description 
@@ -63,7 +63,7 @@ public class JavaTaskTracker {
                             DEBUGGING: LINE 62 is being SKIPPED, turns out it is from sc.nextInt() line 49, I will need to add a new 
                             sc.nextLine() after to fix the input
                             ****FIXED*****
-                            */
+                             */
                             String updatedDesc = sc.nextLine();
                             //we update the description and the updated time
                             retrievedTask.setDescription(updatedDesc);
@@ -89,13 +89,11 @@ public class JavaTaskTracker {
                      */
 
                 }
-            }
-            //delete feature
-            else if(input.equalsIgnoreCase("delete")){
-                if(toDoList.isEmpty()){
+            } //delete feature
+            else if (input.equalsIgnoreCase("delete")) {
+                if (toDoList.isEmpty()) {
                     System.out.println("The To Do List is empty, you cannot remove from it!");
-                }
-                else{
+                } else {
                     System.out.println("Enter the id of the task you want to remove...");
                     int taskId = sc.nextInt();
                     //this line is to make sure that if we use nextLine again it doesn't break the app
@@ -106,63 +104,136 @@ public class JavaTaskTracker {
                     RETRIEVE THE OBJECT, SET THE NEW ID AS THE TASK ID THAT WAS REMOVED 
                     INCREMENT THE TASK ID OR COPY OF IT AND RETRIEVE AND SET AGAIN UNTIL WE REACH END OF TO DO LIST
                     WILL CHECK TOMORROW IF THIS LOGIC WORKS OR FIND ANOTHER WAY
-                    */
+                     */
                     //boolean value to make sure task is found, if not ERROR MESSAGE
                     boolean taskFound = false;
-                    for(int i = 0; i < toDoList.size(); i++){
-                        if(toDoList.get(i).getId()==taskId){
+                    for (int i = 0; i < toDoList.size(); i++) {
+                        if (toDoList.get(i).getId() == taskId) {
                             toDoList.remove(i);
                             System.out.println("The task with the id: " + taskId + " was removed successfully!");
                             //to readjust task ids
-                         
-                           /* for(int readjustId = taskId; readjustId <=toDoList.size();readjustId++){
+
+                            /* for(int readjustId = taskId; readjustId <=toDoList.size();readjustId++){
                                 /*TESTING
                                 we will get the task object in front of the one we removed
                                     we will then set the id as the current readjustid and this will increment on each iteration
                                 DIDNT WORK WILL TRY WHILE LOOP AND START FROM END OF LIST
                                 toDoList.get(readjustId).setId(readjustId);
                             }
-                        */
-                           //will try a while loop and start from the end working my way back readjusting the ids
-                           //will decrement endIndex var at the end til it reaches the end
-                           int endIndex = toDoList.size()-1;
-                           int decreaseIndex = toDoList.size();
-                           while(endIndex!=-1){
-                               toDoList.get(endIndex).setId(decreaseIndex);
-                               endIndex--;
-                               decreaseIndex--;
-                           }
-                            
+                             */
+                            //will try a while loop and start from the end working my way back readjusting the ids
+                            //will decrement endIndex var at the end til it reaches the end
+                            /*
+                           TEST SUCCESS AFTER SOME MINOR MODIFICATIONS, WOULD HAVE MADE MY LIFE EASIER IF I DID NOT WANT THE FIRST ID TO START WITH 1
+                           CRAFTSMANSHIP AND ALL THAT
+                             */
+                            int endIndex = toDoList.size() - 1;
+                            int decreaseIndex = toDoList.size();
+                            while (endIndex != -1) {
+                                toDoList.get(endIndex).setId(decreaseIndex);
+                                endIndex--;
+                                decreaseIndex--;
+                            }
+
                             //break to exit the loop
                             taskFound = true;
                             break;
                         }
                     }
-                    if(!taskFound){
+                    if (!taskFound) {
                         System.out.println("The id you have entered doesn't exist!");
                     }
-                    
+
                 }
-            }
-            else if(input.equalsIgnoreCase("list")){
+            } //list feature
+            else if (input.equalsIgnoreCase("list")) {
                 System.out.println("Enter the option you would like to list 'all/toDo/inProgress/done'");
                 //accepts input
                 String listInput = sc.nextLine();
                 //if list is empty displays message accordingly
-                if(toDoList.isEmpty()){
+                if (toDoList.isEmpty()) {
                     System.out.println("Cannot list anything if the list is empty!!");
-                }
-                //if list is not empty it will accept different inputs all/toDo/inProgress/done and error handling if none of them are typed
-                else{
-                    if(listInput.equalsIgnoreCase("all")){
-                        for(int i = 0; i < toDoList.size();i++){
+                } //if list is not empty it will accept different inputs all/toDo/inProgress/done and error handling if none of them are typed
+                else {
+                    if (listInput.equalsIgnoreCase("all")) {
+                        for (int i = 0; i < toDoList.size(); i++) {
                             System.out.println(toDoList.get(i).toString());
                             System.out.println("****************");
                         }
-                }
-                    
-                }
+                    } else if (listInput.equalsIgnoreCase("toDo")) {
+                        for (int i = 0; i < toDoList.size(); i++) {
+                            if (toDoList.get(i).getStatus().equalsIgnoreCase("todo")) {
+                                System.out.println(toDoList.get(i).toString());
+                                System.out.println("****************");
 
+                            }
+                        }
+                    } else if (listInput.equalsIgnoreCase("inProgress")) {
+                        for (int i = 0; i < toDoList.size(); i++) {
+                            if (toDoList.get(i).getStatus().equalsIgnoreCase("inProgress")) {
+                                System.out.println(toDoList.get(i).toString());
+                                System.out.println("****************");
+
+                            }
+                        }
+                    }
+                     else if(listInput.equalsIgnoreCase("done")){
+                        for(int i = 0; i < toDoList.size(); i++){
+                            if(toDoList.get(i).getStatus().equalsIgnoreCase("done")){
+                               System.out.println(toDoList.get(i).toString());
+                               System.out.println("****************");
+                              
+                            }
+                        }
+                    } 
+                     else{
+                         System.out.println("INVALID INPUT, TRY AGAIN AND MAKE SURE YOU TYPE IT THE SAME AS THE PROMPT!!!");
+                     }
+
+                }
+                //mark feature
+            } else if (input.equalsIgnoreCase("mark")) {
+                //check if there is anything in the list first
+                if (toDoList.isEmpty()) {
+                    System.out.println("Cant mark any tasks if the list is empty!");
+                } else {
+                    System.out.println("Enter the id of the task you want to change it's status..");
+                    int taskId = sc.nextInt();
+                    //to make sure we can still accept nextLine input
+                    sc.nextLine();
+                    boolean taskFound = false;
+                    //get the task object from the array list if the id exists (we will traverse the array for this) and then set new status 
+                    for (int i = 0; i < toDoList.size(); i++) {
+                        //make a task object for the item we get at i to make it easier
+                        Task retrievedTask = toDoList.get(i);
+                        // if the task get id matches the user inputed id then this logic runs
+                        if (retrievedTask.getId() == taskId) {
+                            System.out.println("TASK FOUND IN LIST - mark the task as 'inProgress/done'");
+
+                            String updatedStatus = sc.nextLine();
+                            if (updatedStatus.equalsIgnoreCase("inProgress") || updatedStatus.equalsIgnoreCase("done")) {
+                                //we update the status and the updated time
+                                retrievedTask.setStatus(updatedStatus);
+                                retrievedTask.setUpdatedAt(LocalDateTime.now());
+                                //confirmation message
+                                System.out.println("Task with ID: " + retrievedTask.getId() + " updated successfully!!\n New Status: " + retrievedTask.getStatus() + "\n Updated At: " + retrievedTask.getUpdatedAt());
+                            } else {
+                                System.out.println("INVALID INPUT, MAKE SURE IT MATCHES THE PROMPT ABOVE!!!");
+                            }
+
+                            //the boolean value is used incase we do not find the id in the arraylist
+                            taskFound = true;
+                            //break out of the loop
+                            break;
+                        }
+                    }
+                    if (!taskFound) {
+                        System.out.println("The id you have entered doesn't exist!");
+                    }
+                }
+            }
+            else{
+                System.out.println("INVALID COMMAND - make sure you type in 'add/update/delete/mark/list'");
             }
             System.out.println("Enter 'add/update/delete/mark/list' or 'exit' to close");
             input = sc.nextLine();
