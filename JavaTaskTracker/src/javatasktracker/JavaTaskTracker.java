@@ -113,6 +113,26 @@ public class JavaTaskTracker {
                         if(toDoList.get(i).getId()==taskId){
                             toDoList.remove(i);
                             System.out.println("The task with the id: " + taskId + " was removed successfully!");
+                            //to readjust task ids
+                         
+                           /* for(int readjustId = taskId; readjustId <=toDoList.size();readjustId++){
+                                /*TESTING
+                                we will get the task object in front of the one we removed
+                                    we will then set the id as the current readjustid and this will increment on each iteration
+                                DIDNT WORK WILL TRY WHILE LOOP AND START FROM END OF LIST
+                                toDoList.get(readjustId).setId(readjustId);
+                            }
+                        */
+                           //will try a while loop and start from the end working my way back readjusting the ids
+                           //will decrement endIndex var at the end til it reaches the end
+                           int endIndex = toDoList.size()-1;
+                           int decreaseIndex = toDoList.size();
+                           while(endIndex!=-1){
+                               toDoList.get(endIndex).setId(decreaseIndex);
+                               endIndex--;
+                               decreaseIndex--;
+                           }
+                            
                             //break to exit the loop
                             taskFound = true;
                             break;
@@ -123,6 +143,26 @@ public class JavaTaskTracker {
                     }
                     
                 }
+            }
+            else if(input.equalsIgnoreCase("list")){
+                System.out.println("Enter the option you would like to list 'all/toDo/inProgress/done'");
+                //accepts input
+                String listInput = sc.nextLine();
+                //if list is empty displays message accordingly
+                if(toDoList.isEmpty()){
+                    System.out.println("Cannot list anything if the list is empty!!");
+                }
+                //if list is not empty it will accept different inputs all/toDo/inProgress/done and error handling if none of them are typed
+                else{
+                    if(listInput.equalsIgnoreCase("all")){
+                        for(int i = 0; i < toDoList.size();i++){
+                            System.out.println(toDoList.get(i).toString());
+                            System.out.println("****************");
+                        }
+                }
+                    
+                }
+
             }
             System.out.println("Enter 'add/update/delete/mark/list' or 'exit' to close");
             input = sc.nextLine();
