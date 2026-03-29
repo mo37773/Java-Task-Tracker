@@ -26,6 +26,10 @@ public class Task implements Serializable {
         this.updatedAt = updatedAt;
     }
     
+    public Task(){
+            
+            }
+    
     
 
     public int getId() {

@@ -4,12 +4,10 @@
  */
 package javatasktracker;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,12 +17,15 @@ import java.util.Scanner;
  * @author marti
  */
 public class TaskApp {
-    //need to add while loop to keep app running unti i type exit
 
+    //need to add while loop to keep app running unti i type exit
+    //declare array list, scanner and object mapper for json
     ArrayList<Task> toDoList = new ArrayList<>();
     Scanner sc = new Scanner(System.in);
+    ObjectMapper mapper = new ObjectMapper();
 
     public void run() {
+        mapper.registerModule(new JavaTimeModule());
         loadFile();
         //after declaring the array list and scanner I will accept an input
         System.out.println("Enter a command 'add/update/delete/mark/list'");
@@ -270,7 +271,16 @@ public class TaskApp {
 
     private void saveFile() {
         //file saved
+
+        //new Json serialiaztion
         try {
+            mapper.writeValue(new File("tasks.json"), toDoList);
+            System.out.println("File saved successfully as JSON..");
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
+        }
+
+        /* OLD SERIALIAZATION try {
             File outFile = new File("output.dat");
             FileOutputStream fStream = new FileOutputStream(outFile);
             ObjectOutputStream oStream = new ObjectOutputStream(fStream);
@@ -280,13 +290,19 @@ public class TaskApp {
             oStream.close();
         } catch (IOException e) {
             System.out.println(e);
-        }
-
+        } */
     }
 
     private void loadFile() {
         //load a saved file
         try {
+            toDoList = mapper.readValue(new File("tasks.json"), mapper.getTypeFactory().constructCollectionType(ArrayList.class, Task.class));
+            System.out.println("JSON File loaded successfully...");
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        /* OLD LOAD METHOD try {
             File inFile = new File("output.dat");
             FileInputStream fStream = new FileInputStream(inFile);
             ObjectInputStream oStream = new ObjectInputStream(fStream);
@@ -302,7 +318,7 @@ public class TaskApp {
         } catch (ClassNotFoundException ex) {
             System.out.println(ex);
         }
-
+         */
     }
 
 }
